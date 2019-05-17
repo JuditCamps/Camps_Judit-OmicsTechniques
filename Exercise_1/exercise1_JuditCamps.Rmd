@@ -1,0 +1,67 @@
+---
+title: "Exploratory analysis of a GEO dataset"
+author: "Judit Camps"
+date: "15/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+What is this exercise about?
+
+
+# Summary
+
+The study entitled as	'Endometrial gene expression in fertile and subfertile cows' was done using Bos taurus and the experiment type was expression profiling by array.
+
+The summary of the study is *In order to clarify the cause of reproductive failure, we conducted global endometrial gene expression analysis in fertile and subfertile cows. Hierarchical cluster analysis with the expression levels of mitochondrial DNA encoded genes was divided these cows into two clusters. One cluster was composed of fertile cows, the other cluster contained subfertile cows, and the expressions of mitochondrial DNA encoded genes in subfertile cows were higher than those in fertile cows.*
+ 	
+### Experimental design:
+
+To clarify differences in gene expression patterns of the endometrium between fertile and subfertile cows, endometrial biopsy samples were collected from fertile cows (n=6) and subfertile cows (n=5) at day 7 of the estrus cycle. The cows, which became pregnant at ET or AI within 3 times until biopsy and resulted in pregnant at the first ET in the following cycles after biopsy, were used as fertile cows. The subfertile cows were the animals which failed to conceive in three consecutive ET or AI without detectable abnormalities in their genital tracts and with apparently normal estrus cycles before and after biopsy, respectively.
+
+### Citations:
+
+Matsuyama S, Nakamura S, Minabe S, Sakatani M, Takenouchi N, Iwata H, Kimura K
+
+
+# Data description
+
+We have two files:
+
+- the targets files
+- The expression matrix
+
+```{r}
+targets <- read.csv("targets.txt", row.names=1, sep="")
+expression <- read.delim("expression.txt", row.names=1, comment.char="#")
+````
+
+
+```{r}
+show(targets)
+
+dim(expression)
+summary(expression)
+```
+
+Once we have read both files, we can now check the type of files they are:
+
+```{r}
+class(targets)
+class(expression)
+
+```
+
+We can see that they are both data frames.
+
+```{r}
+summary(expression)
+
+boxplot(expression, las=2, col=targets$Colors)
+```
+
