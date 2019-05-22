@@ -62,6 +62,37 @@ We can see that they are both data frames.
 ```{r}
 summary(expression)
 
-boxplot(expression, las=2, col=targets$Colors)
+boxplot(expression, las = 2, col=targets$Colors)
 ```
 
+
+##PART 2
+
+```{r}
+library(Biobase)
+````
+
+```{r}
+pcs <- prcomp(expression)
+names(pcs)
+## [1] "sdev"     "rotation" "center"   "scale"    "x"
+barplot(pcs$sdev)
+```
+
+
+```{r}
+require(Biobase)
+```
+
+```{r}
+expressionValue <- matrix(expression)
+myEset <- ExpressionSet(expressionValue)
+class(myEset)
+
+show(myEset)
+```
+```{r}
+columnDesc <-  data.frame(labelDescription= c("SampleName", "Type", "Replicate", "Colors")
+myAnnotDF <- new("AnnotatedDataFrame", data=targets, varMetadata= columnDesc)
+show(myAnnotDF)
+```
