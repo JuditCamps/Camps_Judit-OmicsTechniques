@@ -37,16 +37,15 @@ We have two files:
 - The expression matrix
 
 ```{r}
-targets <- read.csv("targets.txt", row.names=1, sep="")
-expression <- read.delim("expression.txt", row.names=1, comment.char="#")
-````
+targets <- read.delim("targets.txt", row.names=NULL)
+expression <- as.matrix(read.delim("expression.txt", row.names=1, comment.char="#"))
+```
 
 
 ```{r}
 show(targets)
 
 dim(expression)
-summary(expression)
 ```
 
 Once we have read both files, we can now check the type of files they are:
@@ -69,14 +68,11 @@ boxplot(expression, las = 2, col=targets$Colors)
 ##PART 2
 
 ```{r}
-library(Biobase)
-````
+myGenes <- 
+```
 
 ```{r}
-pcs <- prcomp(expression)
-names(pcs)
-## [1] "sdev"     "rotation" "center"   "scale"    "x"
-barplot(pcs$sdev)
+library(Biobase)
 ```
 
 
@@ -85,14 +81,54 @@ require(Biobase)
 ```
 
 ```{r}
-expressionValue <- matrix(expression)
-myEset <- ExpressionSet(expressionValue)
+expressionValues <- (expression)
+myEset <- ExpressionSet(expressionValues)
 class(myEset)
 
 show(myEset)
 ```
 ```{r}
-columnDesc <-  data.frame(labelDescription= c("SampleName", "Type", "Replicate", "Colors")
-myAnnotDF <- new("AnnotatedDataFrame", data=targets, varMetadata= columnDesc)
+columnDesc <- data.frame(labelDescription= c("SampleName", "Type", "Replicate", "Colors"))
+
+myAnnotDF <- new("AnnotatedDataFrame", data=targets, varMetadata=columnDesc)
+
 show(myAnnotDF)
 ```
+
+
+
+```{r}
+phenoData(myEset) <- myAnnotDF
+```
+
+```{r}
+rownames(pData(myAnnotDF))<-pData(myAnnotDF)$SampleName
+myEset <- ExpressionSet(assayData = expressionValues, phenoData = myAnnotDF)
+show(myEset)
+```
+
+```{r}
+myEset <- ExpressionSet(assayData = expressionValues, phenoData = myAnnotDF, featureNames=myGenes)
+
+```
+
+
+```{r}
+
+```
+
+## 3.2 Getting data from GEO
+
+```{r}
+if (!require(GEOquery)) {
+  BiocManager::install("GEOquery")
+}
+
+require(GEOquery)
+gse <- getGEO("GSE107741")
+class(gse)
+
+names(gse)
+```
+
+
