@@ -68,7 +68,9 @@ boxplot(expression, las = 2, col=targets$Colors)
 ##PART 2
 
 ```{r}
-myGenes <- 
+myGenes <- paste0("sample", 1:11)
+
+myInfo=list(myName="Judit Camps", myContact="judit.camps@alum.esci.upf.edu", myTitle="Exercise on Expressionset")
 ```
 
 ```{r}
@@ -114,8 +116,38 @@ myEset <- ExpressionSet(assayData = expressionValues, phenoData = myAnnotDF, fea
 
 
 ```{r}
+myDesc <- new("MIAME", name= myInfo[["myName"]], contact= myInfo[["myContact"]], title=myInfo[["myTitle"]])
 
+print(myDesc)
 ```
+
+```{r}
+myEset <- ExpressionSet(assayData = expressionValues, phenoData = myAnnotDF, featureNames=myGenes, experimentData = myDesc)
+```
+
+```{r}
+dim(exprs(myEset))
+
+class(phenoData(myEset))
+
+class(pData(phenoData(myEset)))
+
+head(pData(phenoData(myEset)))
+
+head(pData(myEset))
+```
+
+```{r}
+smallEset <- myEset[1:15, c(1:3,6:8)]
+dim(exprs(smallEset))
+
+dim(pData(smallEset))
+
+head(pData(smallEset))
+
+all(colnames(exprs(smallEset))==rownames(pData(smallEset)))
+```
+
 
 ## 3.2 Getting data from GEO
 
