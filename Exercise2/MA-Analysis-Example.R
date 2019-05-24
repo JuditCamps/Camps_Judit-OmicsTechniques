@@ -9,7 +9,7 @@
 workingDir <-getwd()
 dataDir <- file.path(workingDir, "data")
 resultsDir <- file.path(workingDir, "results")
-setwd(resultsDir)
+setwd(dataDir)
 
 
 #---------------------------------------------------------------------------------------------
