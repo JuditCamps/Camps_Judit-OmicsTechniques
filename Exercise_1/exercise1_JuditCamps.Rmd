@@ -62,6 +62,9 @@ We can see that they are both data frames.
 summary(expression)
 
 boxplot(expression, las = 2, col=targets$Colors)
+
+
+boxplot(log(expression), las = 2, col=targets$Colors)
 ```
 
 
