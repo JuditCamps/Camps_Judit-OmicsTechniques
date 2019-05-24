@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-What is this exercise about?
+In this practical we will do an analysis of a dataset obtained from GEO.
 
 
 # Summary
