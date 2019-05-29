@@ -1,0 +1,89 @@
+---
+title: "MA-Analysis"
+author: "Judit Camps"
+date: "27/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+workingDir <-getwd()
+dataDir <- file.path(workingDir, "data")
+resultsDir <- file.path(workingDir, "results")
+```
+
+
+```{r}
+targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise2/data/targets.csv", row.names=NULL)
+targets
+```
+
+```{r}
+if (!require(GEOquery)) {
+  BiocManager::install("GEOquery")
+}
+
+require(GEOquery)
+gse <- getGEO("GSE107741")
+class(gse)
+
+names(gse)
+
+gse[[1]]
+
+esetFromGEO <- gse[[1]]
+```
+
+```{r}
+#CELfiles <- list.celfiles(file.path(dataDir))
+#CELfiles
+
+#awData <- read.celfiles(file.path(dataDir,CELfiles))
+```
+
+#DEFINE SOME VARIABLES FOR PLOTS
+
+```{r}
+sampleNames <- as.character(targets$ShortName)
+sampleColor <- as.character(targets$Colors)
+```
+
+###QUALITY CONTROL OF ARRAYS: RAW DATA
+
+#BOXPLOT
+
+
+```{r}
+boxplot(esetFromGEO, which="all",las=2, main="Intensity distribution of RAW data", 
+        cex.axis=0.6, col=sampleColor, names=sampleNames)
+```
+
+
+```{r}
+require (limma)
+
+targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise2/data/targets.csv")
+targets
+```
+
+## Design matrix
+```{r}
+design<-matrix(
+  c(1,1,1,1,1,1,0,0,0,0,0,
+    0,0,0,0,0,0,1,1,1,1,1),
+  nrow=11,byrow=F)
+design2 <-model.matrix(~ 0+targets$Type) #We put a 0 as there isn't an intercept
+colnames(design)<- colnames(design2)<-c("Fer", "Subfer")
+rownames(design) <- rownames(design2)<- targets$SampleName 
+print(design); print(design2)
+```
+
+## Contrast matrix
+```{r}
+cont.matrix <- makeContrasts (
+  FerSub = Fer-Subfer,
+  levels=design)
+```

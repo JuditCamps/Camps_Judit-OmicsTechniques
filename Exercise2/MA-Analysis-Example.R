@@ -9,7 +9,7 @@
 workingDir <-getwd()
 dataDir <- file.path(workingDir, "data")
 resultsDir <- file.path(workingDir, "results")
-setwd(dataDir)
+#setwd(dataDir)
 
 
 #---------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ plotPCA(exprs(eset), labels=sampleNames, dataDesc="selected samples", colors=sam
 dev.off()
 
 #ARRAY QUALITY METRICS
-arrayQualityMetrics(eset,  reporttitle="QualityControl", force=TRUE)
+# arrayQualityMetrics(eset,  reporttitle="QualityControl", force=TRUE)
 
 
 #---------------------------------------------------------------------------------------------
@@ -159,6 +159,8 @@ annotation(eset) <- "org.Mm.eg.db"
 eset_filtered <- nsFilter(eset, var.func=IQR,
          var.cutoff=0.75, var.filter=TRUE,
          filterByQuantile=TRUE)
+#IQR -> InterQuartileRange: distance between 1st and 3rd quartile
+
 #NUMBER OF GENES OUT
 print(eset_filtered$filter.log$numLowVar)
 
