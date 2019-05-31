@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+
 ```{r}
 if (!require(BiocManager)) install.packages("BiocManager")
 
@@ -40,6 +42,7 @@ dataDir <- file.path(workingDir, "data")
 resultsDir <- file.path(workingDir, "results")
 ```
 
+# For GSE25529:
 
 ```{r}
 targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise2/data/targets.csv", row.names=NULL)
