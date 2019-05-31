@@ -1,9 +1,11 @@
-fileName;grupos;ShortName;Colors
-GSM671653.CEL;IND;53_Ind;red
-GSM671654.CEL;IND;54_Ind;red
-GSM671655.CEL;IND;55_Ind;red
-GSM671656.CEL;IND;56_Ind;red
-GSM671657.CEL;WT;57_WT;blue
-GSM671658.CEL;WT;58_WT;blue
-GSM671659.CEL;WT;59_WT;blue
-GSM671660.CEL;WT;60_WT;blue
+SampleName	Groups	Batch	Sample	Color
+GSM627605	DMSO	batch1	a_[Affy]	2
+GSM627606	DMSO	batch1	b_[Affy]	2
+GSM627607	DMSO	batch2	c_[Affy]	3
+GSM627608	DMSO	batch2	d_[Affy]	3
+GSM627609	DMSO	batch2	e_[Affy]	3
+GSM627610	JNKi	batch1	a_[Affy]	4
+GSM627611	JNKi	batch1	b_[Affy]	4
+GSM627612	JNKi	batch2	c_[Affy]	5
+GSM627613	JNKi	batch2	d_[Affy]	5
+GSM627614	JNKi	batch2	e_[Affy]	5
