@@ -15,17 +15,17 @@ In this practical we will do an analysis of a dataset obtained from GEO.
 
 
 # Summary
+GEO id: GSE107741
 
 The study entitled as	'Endometrial gene expression in fertile and subfertile cows' was done using Bos taurus and the experiment type was expression profiling by array.
 
-The summary of the study is *In order to clarify the cause of reproductive failure, we conducted global endometrial gene expression analysis in fertile and subfertile cows. Hierarchical cluster analysis with the expression levels of mitochondrial DNA encoded genes was divided these cows into two clusters. One cluster was composed of fertile cows, the other cluster contained subfertile cows, and the expressions of mitochondrial DNA encoded genes in subfertile cows were higher than those in fertile cows.*
+The summary of the study is *In order to clarify the cause of reproductive failure, we conducted global endometrial gene expression analysis in fertile and subfertile cows. Hierarchical cluster analysis with the expression levels of mitochondrial DNA encoded genes was divided these cows into two clusters. One cluster was composed of fertile cows, the other cluster contained subfertile cows, and the expressions of mitochondrial DNA encoded genes in subfertile cows were higher than those in fertile cows*
  	
 ### Experimental design:
 
 To clarify differences in gene expression patterns of the endometrium between fertile and subfertile cows, endometrial biopsy samples were collected from fertile cows (n=6) and subfertile cows (n=5) at day 7 of the estrus cycle. The cows, which became pregnant at ET or AI within 3 times until biopsy and resulted in pregnant at the first ET in the following cycles after biopsy, were used as fertile cows. The subfertile cows were the animals which failed to conceive in three consecutive ET or AI without detectable abnormalities in their genital tracts and with apparently normal estrus cycles before and after biopsy, respectively.
 
 ### Citations:
-
 Matsuyama S, Nakamura S, Minabe S, Sakatani M, Takenouchi N, Iwata H, Kimura K
 
 
@@ -37,8 +37,8 @@ We have two files:
 - The expression matrix
 
 ```{r}
-targets <- read.delim("targets.txt", row.names=NULL)
-expression <- as.matrix(read.delim("expression.txt", row.names=1, comment.char="#"))
+targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_1/GSE107741/targets.txt")
+expression <- as.matrix(read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_1/expression.txt", row.names=1, comment.char="#"))
 ```
 
 
@@ -72,7 +72,6 @@ boxplot(log(expression), las = 2, col=targets$Colors)
 
 ```{r}
 myGenes <- paste0("sample", 1:11)
-
 myInfo=list(myName="Judit Camps", myContact="judit.camps@alum.esci.upf.edu", myTitle="Exercise on Expressionset")
 ```
 
@@ -89,14 +88,11 @@ require(Biobase)
 expressionValues <- (expression)
 myEset <- ExpressionSet(expressionValues)
 class(myEset)
-
 show(myEset)
 ```
 ```{r}
 columnDesc <- data.frame(labelDescription= c("SampleName", "Type", "Replicate", "Colors"))
-
 myAnnotDF <- new("AnnotatedDataFrame", data=targets, varMetadata=columnDesc)
-
 show(myAnnotDF)
 ```
 
@@ -114,13 +110,11 @@ show(myEset)
 
 ```{r}
 myEset <- ExpressionSet(assayData = expressionValues, phenoData = myAnnotDF, featureNames=myGenes)
-
 ```
 
 
 ```{r}
 myDesc <- new("MIAME", name= myInfo[["myName"]], contact= myInfo[["myContact"]], title=myInfo[["myTitle"]])
-
 print(myDesc)
 ```
 
@@ -130,24 +124,17 @@ myEset <- ExpressionSet(assayData = expressionValues, phenoData = myAnnotDF, fea
 
 ```{r}
 dim(exprs(myEset))
-
 class(phenoData(myEset))
-
 class(pData(phenoData(myEset)))
-
 head(pData(phenoData(myEset)))
-
 head(pData(myEset))
 ```
 
 ```{r}
 smallEset <- myEset[1:15, c(1:3,6:8)]
 dim(exprs(smallEset))
-
 dim(pData(smallEset))
-
 head(pData(smallEset))
-
 all(colnames(exprs(smallEset))==rownames(pData(smallEset)))
 ```
 
@@ -158,12 +145,8 @@ all(colnames(exprs(smallEset))==rownames(pData(smallEset)))
 if (!require(GEOquery)) {
   BiocManager::install("GEOquery")
 }
-
 require(GEOquery)
 gse <- getGEO("GSE107741")
 class(gse)
-
 names(gse)
 ```
-
-
