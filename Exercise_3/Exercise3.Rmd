@@ -9,6 +9,25 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+First of all we have to read the targets:
+
+```{r}
+targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_3/GSE107741/data/targets.txt")
+print(targets)
+```
+
+Now we would have to read the CEL files, but as the used dataset doesn't have these type of files, the expression set will be used:
+
+```{r}
+# In the case of having CEL files:
+# require(oligo)
+# celFiles <- list.celfiles("./data", full.names = TRUE)
+
+```
+
+```{r}
+
+```
 
 ```{r}
 BiocManager::install("HsAgilentDesign023647.db")
