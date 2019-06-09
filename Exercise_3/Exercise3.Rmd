@@ -1,0 +1,20 @@
+---
+title: "Report"
+author: "Judit Camps"
+date: "8/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+BiocManager::install("HsAgilentDesign023647.db")
+require(HsAgilentDesign023647.db)
+columns(HsAgilentDesign023647.db)
+
+probesAvsB <- rownames(topTab_AvsB)[1:10]
+anotAvsB <- select(hgu133a.db, probesAvsB, columns = c("ENTREZID", "SYMBOL", "GENENAME"))
+```
