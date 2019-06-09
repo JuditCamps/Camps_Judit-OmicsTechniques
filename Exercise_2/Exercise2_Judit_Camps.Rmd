@@ -1,0 +1,222 @@
+---
+title: "MA-Analysis"
+author: "Judit Camps"
+date: "27/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+if (!require(BiocManager)) install.packages("BiocManager")
+
+installifnot <- function (pkg){
+  if (!require(pkg, character.only=T)){
+    BiocManager::install(pkg)
+}else{
+  require(pkg, character.only=T)
+  }
+}
+
+installifnot("pd.mogene.1.0.st.v1")
+installifnot("mogene10sttranscriptcluster.db")
+installifnot("oligo")
+installifnot("limma")
+installifnot("Biobase")
+installifnot("arrayQualityMetrics")
+installifnot("genefilter")
+installifnot("multtest")
+installifnot("annotate")
+installifnot("xtable")
+installifnot("gplots")
+installifnot("scatterplot3d")
+```
+
+```{r}
+workingDir <-getwd()
+dataDir <- file.path(workingDir, "GSE107741/data")
+resultsDir <- file.path(workingDir, "GSE107741/results")
+```
+
+# For GSE25529:
+
+```{r}
+targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_2/GSE107741/data/targets.txt")
+targets
+```
+
+
+
+
+```{r}
+if (!require(GEOquery)) {
+  BiocManager::install("GEOquery")
+}
+require(GEOquery)
+gse <- getGEO("GSE107741")
+class(gse)
+names(gse)
+
+rawData <- gse[[1]]
+
+names(pData(rawData))
+``` 
+
+
+#DEFINE SOME VARIABLES FOR PLOTS
+
+```{r}
+sampleNames <- as.character(targets$SampleName)
+sampleColor <- as.character(targets$Color)
+```
+
+###QUALITY CONTROL OF ARRAYS: RAW DATA
+
+#BOXPLOT
+
+
+
+```{r}
+boxplot(rawData, which="all",las=2, main="Intensity distribution of RAW data", 
+        cex.axis=0.6, col=sampleColor, names=sampleNames)
+```
+
+
+#HIERARQUICAL CLUSTERING
+
+```{r}
+clust.euclid.average <- hclust(dist(t(exprs(rawData))),method="average")
+plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of RawData", 
+     cex=0.7,  hang=-1)
+```
+
+#PRINCIPAL COMPONENT ANALYSIS
+```{r}
+plotPCA <- function ( X, labels=NULL, colors=NULL, dataDesc="", scale=FALSE, formapunts=NULL, myCex=0.8,...)
+{
+  pcX<-prcomp(t(X), scale=scale) # o prcomp(t(X))
+  loads<- round(pcX$sdev^2/sum(pcX$sdev^2)*100,1)
+  xlab<-c(paste("PC1",loads[1],"%"))
+  ylab<-c(paste("PC2",loads[2],"%"))
+  if (is.null(colors)) colors=1
+  plot(pcX$x[,1:2],xlab=xlab,ylab=ylab, col=colors, pch=formapunts, 
+       xlim=c(min(pcX$x[,1])-100000, max(pcX$x[,1])+100000),ylim=c(min(pcX$x[,2])-100000, max(pcX$x[,2])+100000))
+  text(pcX$x[,1],pcX$x[,2], labels, pos=3, cex=myCex)
+  title(paste("Plot of first 2 PCs for expressions in", dataDesc, sep=" "), cex=0.8)
+}
+```
+```{r}
+plotPCA(exprs(rawData), labels=sampleNames, dataDesc="raw data", colors=sampleColor,
+        formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
+```
+
+
+#SAVE TO A FILE
+```{r}
+pdf(file.path(resultsDir, "QCPlots_Raw.pdf"))
+boxplot(rawData, which="all",las=2, main="Intensity distribution of RAW data", 
+        cex.axis=0.6, col=sampleColor, names=sampleNames)
+plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of samples of RawData", 
+     cex=0.7,  hang=-1)
+plotPCA(exprs(rawData), labels=sampleNames, dataDesc="raw data", colors=sampleColor,
+        formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
+dev.off()
+```
+
+
+###DATA NORMALIZATION
+```{r}
+eset<-rma(rawData)
+
+write.exprs(eset, file.path(resultsDir, "NormData.txt"))
+```
+
+
+###QUALITY CONTROL OF ARRAYS: NORMALIZED DATA
+
+#BOXPLOT
+```{r}
+boxplot(eset, las=2, main="Intensity distribution of Normalized data", cex.axis=0.6, 
+        col=sampleColor, names=sampleNames)
+```
+
+#HIERARQUICAL CLUSTERING
+```{r}
+clust.euclid.average <- hclust(dist(t(exprs(eset))),method="average")
+plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of NormData", 
+     cex=0.7,  hang=-1)
+```
+
+#PRINCIPAL COMPONENT ANALYSIS
+```{r}
+plotPCA <- function ( X, labels=NULL, colors=NULL, dataDesc="", scale=FALSE, formapunts=NULL, myCex=0.8,...)
+{
+  pcX<-prcomp(t(X), scale=scale) # o prcomp(t(X))
+  loads<- round(pcX$sdev^2/sum(pcX$sdev^2)*100,1)
+  xlab<-c(paste("PC1",loads[1],"%"))
+  ylab<-c(paste("PC2",loads[2],"%"))
+  if (is.null(colors)) colors=1
+  plot(pcX$x[,1:2],xlab=xlab,ylab=ylab, col=colors, pch=formapunts, 
+       xlim=c(min(pcX$x[,1])-10, max(pcX$x[,1])+10),ylim=c(min(pcX$x[,2])-10, max(pcX$x[,2])+10))
+  text(pcX$x[,1],pcX$x[,2], labels, pos=3, cex=myCex)
+  title(paste("Plot of first 2 PCs for expressions in", dataDesc, sep=" "), cex=0.8)
+}
+```
+```{r}
+plotPCA(exprs(eset), labels=sampleNames, dataDesc="NormData", colors=sampleColor,
+        formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
+```
+
+#SAVE TO A FILE
+```{r}
+pdf(file.path(resultsDir, "QCPlots_Norm.pdf"))
+boxplot(eset, las=2, main="Intensity distribution of Normalized data", cex.axis=0.6, 
+        col=sampleColor, names=sampleNames)
+plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of NormData", 
+     cex=0.7,  hang=-1)
+plotPCA(exprs(eset), labels=sampleNames, dataDesc="selected samples", colors=sampleColor,
+        formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
+dev.off()
+```
+
+
+
+# MATRICES
+```{r}
+require (limma)
+
+targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_2/GSE107741/data/targets.txt")
+targets
+```
+
+## Design matrix
+```{r}
+design<-matrix(
+  c(1,1,1,1,1,1,0,0,0,0,0,
+    0,0,0,0,0,0,1,1,1,1,1),
+  nrow=11,byrow=F)
+design2 <-model.matrix(~ 0+targets$Type) #We put a 0 as there isn't an intercept
+colnames(design)<- colnames(design2)<-c("Fer", "Subfer")
+rownames(design) <- rownames(design2)<- targets$SampleName 
+print(design); print(design2)
+```
+
+## Contrast matrix
+```{r}
+cont.matrix <- makeContrasts (
+  FerSub = Fer-Subfer,
+  levels=design)
+```
+
+
+```{r fitModel}
+require(limma)
+fit<-lmFit(dataMatrix, design) # Fits a linear model, solving the equations in order to obtain the estimates. 
+# Estimates the parameters using least squares.
+fit.main<-contrasts.fit(fit, cont.matrix)
+fit.main<-eBayes(fit.main)
+```

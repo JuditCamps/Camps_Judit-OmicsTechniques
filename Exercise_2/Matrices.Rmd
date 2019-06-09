@@ -1,0 +1,49 @@
+---
+title: "Matrices"
+author: "Judit Camps"
+date: "29/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+In this document I will generate the *Design matrix* and the *Contrast matrix* of the GEO data.
+
+```{r}
+require (limma)
+
+targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise2/data/targets.csv")
+targets
+```
+
+## Design matrix
+In order to design the matrix we can do it with the function:
+```{r}
+design<-matrix(
+  c(1,1,1,1,1,1,0,0,0,0,0,
+    0,0,0,0,0,0,1,1,1,1,1),
+  nrow=11,byrow=F)
+colnames(design)<-c("Fer", "Subfer")
+rownames(design)<- targets$SampleName 
+print(design)
+```
+
+Or we can do it manually:
+```{r}
+design2 <-model.matrix(~ 0+targets$Type) #We put a 0 as there isn't an intercept
+colnames(design2)<-c("Fer", "Subfer")
+rownames(design2)<- targets$SampleName 
+print(design2)
+```
+
+## Contrast matrix
+```{r}
+cont.matrix <- makeContrasts (
+  FerSub = Fer-Subfer,
+  levels=design)
+print(cont.matrix)
+```
