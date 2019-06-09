@@ -42,7 +42,7 @@ dataDir <- file.path(workingDir, "GSE107741/data")
 resultsDir <- file.path(workingDir, "GSE107741/results")
 ```
 
-# For GSE25529:
+# For GSE107741:
 
 ```{r}
 targets <- read.delim("~/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_2/GSE107741/data/targets.txt")
