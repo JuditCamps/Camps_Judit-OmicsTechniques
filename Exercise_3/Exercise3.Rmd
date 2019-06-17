@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Link to repository: https://github.com/JuditCamps/Camps_Judit-OmicsTechniques.git
+
 # Abstract
 The data used has been taken for this study is from the experiment titled *Endometrial gene expression in fertile and subfertile cows* which was made on the Bos taurus organism. The main aim of the experiment was to clarify the cause of reproductive failure in this species.
 
