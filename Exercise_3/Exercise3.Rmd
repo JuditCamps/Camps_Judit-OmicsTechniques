@@ -323,12 +323,29 @@ anotAvsB <- select(hgu133a.db, probesAvsB, columns = c("ENTREZID", "SYMBOL", "GE
 
 
 # Results
-As we can see from the boxplot of the raw data, we may have guessed that this data was already normalized, but as we could see in the principal components analysis, we obtain an incorrect plot.
+Here we can see the differences from the boxplots of the raw data and the normalized data:
+
+![/Users/juditcampsbruch/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_3/GSE107741/results](GSE107741/results/boxplot_rawData.png)
+
+![/Users/juditcampsbruch/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_3/GSE107741/results](GSE107741/results/boxplot_norm.png)
+
+If we also compare the clusterings of the raw data and the normalized data, we can see some differences in the clusters:
+
+![/Users/juditcampsbruch/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_3/GSE107741/results](GSE107741/results/clust_rawData.png)
 
 Once we have normalized the data, we can see the PCA plot which shows a difference between fertile cows (that can be seen in red) and those that are subfertile (seen in blue).
 
+
+
+![/Users/juditcampsbruch/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_3/GSE107741/results](GSE107741/results/clust_norm.png)
+
+With the PCA plot of the normalized data we can see that there is a separation between both groups (fertile and subfertile):
+
+![/Users/juditcampsbruch/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_3/GSE107741/results](GSE107741/results/pca_norm.png)
+
 With the volcano plots we are plotting the significance versus the fold-change of the data replicates. Those data points that have a low p-value, and so are significant, will appear on the top of the plot. In this case we can see that we obtain some significant genes.
 
+![/Users/juditcampsbruch/Documents/BDBI/2n/3r_trim/Omics_Techniques/Camps_Judit-OmicsTechniques/Exercise_3/GSE107741/results](GSE107741/results/volcano_plot.png)
 
 # Conclusions
 We can say that, as shown in the previous plots, there is the existance of some genes that may lead to having different types of cows that might be fertile or subfertile. These genes are those shown in the volcano plot as significant.
